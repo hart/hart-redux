@@ -4,7 +4,7 @@ const defaultActionNames = ["request", "success", "error"];
 export const createActionNames = (name, operationNames = defaultOperationNames, actionNames = defaultActionNames) => {
 
 	operationNames = operationNames.map(x => x.toUpperCase());
-	actionNames = actionName.map(x => x.toUpperCase());
+	actionNames = actionNames.map(x => x.toUpperCase());
 
 	let objectName = name.toUpperCase();
 
@@ -99,7 +99,7 @@ const ObjectUpdateReducer = Actions => (state = false, action) => {
 	}
 };
 
-const ObjectDeleteReducer = (state = false, action) => {
+const ObjectDeleteReducer = Actions => (state = false, action) => {
 	switch (action.type) {
 		case Actions.delete.request:
 			return true;
