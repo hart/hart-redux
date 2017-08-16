@@ -130,7 +130,18 @@ export const getDefaultReducerNames = () => ({
 	objectDeleting: "objectDeleting"
 });
 
-export const createNormalizedReducers = (Actions, ReducerNames = getDefaultReducerNames()) => {
+export const getDefaultSelectorNames = () => ({
+	getObjectIds: "getObjectIds",
+	getObjects: "getObjects",
+	getObjectById: "getObjectById",
+	areObjectsLoading: "areObjectsLoading",
+	hasObjects: "hasObjects",
+	isObjectCreating: "isObjectCreating",
+	isObjectUpdating: "isObjectUpdating",
+	isObjectDeleting: "isObjectDeleting",
+});
+
+export const createNormalizedReducers = ( Actions, ReducerNames = getDefaultReducerNames(), SelectorNames = getDefaultSelectorNames()) => {
 	return {
 		reducers: {
 			[ReducerNames.allIds]: IdsReducer(Actions),
@@ -142,14 +153,14 @@ export const createNormalizedReducers = (Actions, ReducerNames = getDefaultReduc
 			[ReducerNames.objectDeleting]: ObjectDeleteReducer(Actions)
 		},
 		selectors: {
-			getObjectIds: getObjectIds(ReducerNames),
-			getObjects: getObjects(ReducerNames),
-			getObjectById: getObjectById(ReducerNames),
-			areObjectsLoading: areObjectsLoading(ReducerNames),
-			hasObjects: hasObjects(ReducerNames),
-			isObjectCreating: isObjectCreating(ReducerNames),
-			isObjectUpdating: isObjectUpdating(ReducerNames),
-			isObjectDeleting: isObjectDeleting(ReducerNames)
+			[SelectorNames.getObjectIds]: getObjectIds(ReducerNames),
+			[SelectorNames.getObjects]: getObjects(ReducerNames),
+			[SelectorNames.getObjectById]: getObjectById(ReducerNames),
+			[SelectorNames.areObjectsLoading]: areObjectsLoading(ReducerNames),
+			[SelectorNames.hasObjects]: hasObjects(ReducerNames),
+			[SelectorNames.isObjectCreating]: isObjectCreating(ReducerNames),
+			[SelectorNames.isObjectUpdating]: isObjectUpdating(ReducerNames),
+			[SelectorNames.isObjectDeleting]: isObjectDeleting(ReducerNames)
 		}
 	}
 }

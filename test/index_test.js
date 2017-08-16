@@ -2,6 +2,7 @@ import { combineReducers } from 'redux';
 import { 
 	createNormalizedReducers, 
 	getDefaultReducerNames, 
+	getDefaultSelectorNames,
 	createActionNames, 
 	configureStore, 
 	getModules, 
@@ -21,7 +22,18 @@ let reducerNames = Object.assign({}, getDefaultReducerNames(), {
 	objectDeleting: "fooDeleting"
 });
 
-const normalized  = createNormalizedReducers(FoosActions, reducerNames);
+const selectorNames = Object.assign(getDefaultSelectorNames(), {
+	getObjectIds: "getAppIds",
+	getObjects: "getApps",
+	getObjectById: "getAppById",
+	areObjectsLoading: "areAppsLoading",
+	hasObjects: "hasApps",
+	isObjectCreating: "isAppCreating",
+	isObjectUpdating: "isAppUpdating",
+	isObjectDeleting: "isAppDeleting",
+});
+
+const normalized  = createNormalizedReducers(FoosActions, reducerNames, selectorNames);
 
 const reducer = combineReducers(normalized.reducers);
 const selectors = normalized.selectors;
