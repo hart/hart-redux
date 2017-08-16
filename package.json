@@ -1,11 +1,8 @@
 {
   "name": "@hart/hart-redux",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "",
-  "main": "lib/index.js",
-  "scripts": {
-    "build": "neutrino build"
-  },
+  "main": "src/index.js",
   "repository": {
     "type": "git",
     "url": "git@gitlab.hrt.io:frontend/hart-redux.git"
@@ -14,10 +11,5 @@
   "license": "ISC",
   "dependencies": {
     "redux": "^3.7.2"
-  },
-  "devDependencies": {
-    "babel-preset-next-react": "^1.1.1",
-    "neutrino": "^6.1.5",
-    "neutrino-preset-component": "^0.0.1"
   }
 }
