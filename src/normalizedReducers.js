@@ -27,9 +27,9 @@ export const createActionNames = (name, operationNames = defaultOperationNames, 
 const IdsReducer = Actions => (state = [], action) => {
 	switch (action.type) {
 		// case for the complete list of objects returned
-		case Actions.fetch.success:
+		case Actions.FETCH.SUCCESS:
 			return action.response.data.map(object => object.id);
-		case Actions.create.success:
+		case Actions.CREATE.SUCCESS:
 			return [...state, action.response.data.id];
 		default:
 			return state;
@@ -39,12 +39,12 @@ const IdsReducer = Actions => (state = [], action) => {
 const ByIdsReducer = Actions => (state = {}, action) => {
 	switch (action.type) {
 		// case for the complete list of objects returned
-		case Actions.fetch.success:
+		case Actions.FETCH.SUCCESS:
 			return action.response.data.reduce((objects, object) => {
 				objects[object.id] = object;
 				return objects;
 			}, {});
-		case Actions.create.success:
+		case Actions.CREATE.SUCCESS:
 			let object = action.response.data;
 			return Object.assign({}, state, {[object.id]: object});
 		default:
@@ -54,10 +54,10 @@ const ByIdsReducer = Actions => (state = {}, action) => {
 
 const ObjectsLoadingReducer = Actions => (state = false, action) => {
 	switch (action.type) {
-		case Actions.fetch.request:
+		case Actions.FETCH.REQUEST:
 			return true;
-		case Actions.fetch.success:
-		case Actions.fetch.error:
+		case Actions.FETCH.SUCCESS:
+		case Actions.FETCH.ERROR:
 			return false;
 		default:
 			return state;
@@ -66,9 +66,9 @@ const ObjectsLoadingReducer = Actions => (state = false, action) => {
 
 const HasObjectsReducer = Actions => (state = { hasObjects: null, error: null }, action) => {
 	switch (action.type) {
-		case Actions.fetch.success:
+		case Actions.FETCH.SUCCESS:
 			return { hasObjects: action.response.data.length > 0, error: null };
-		case Actions.fetch.error:
+		case Actions.FETCH.ERROR:
 			return { hasObjects: null, error: action.response.error };
 		default:
 			return state;
@@ -77,10 +77,10 @@ const HasObjectsReducer = Actions => (state = { hasObjects: null, error: null },
 
 const ObjectCreateReducer = Actions => (state = false, action) => {
 	switch (action.type) {
-		case Actions.create.request:
+		case Actions.CREATE.REQUEST:
 			return true;
-		case Actions.create.success:
-		case Actions.create.error:
+		case Actions.CREATE.SUCCESS:
+		case Actions.CREATE.ERROR:
 			return false;
 		default:
 			return state;
@@ -89,10 +89,10 @@ const ObjectCreateReducer = Actions => (state = false, action) => {
 
 const ObjectUpdateReducer = Actions => (state = false, action) => {
 	switch (action.type) {
-		case Actions.update.request:
+		case Actions.UPDATE.REQUEST:
 			return true;
-		case Actions.update.success:
-		case Actions.update.error:
+		case Actions.UPDATE.SUCCESS:
+		case Actions.UPDATE.ERROR:
 			return false;
 		default:
 			return state;
@@ -101,10 +101,10 @@ const ObjectUpdateReducer = Actions => (state = false, action) => {
 
 const ObjectDeleteReducer = Actions => (state = false, action) => {
 	switch (action.type) {
-		case Actions.delete.request:
+		case Actions.DELETE.REQUEST:
 			return true;
-		case Actions.delete.success:
-		case Actions.delete.error:
+		case Actions.DELETE.SUCCESS:
+		case Actions.DELETE.ERROR:
 			return false;
 		default:
 			return state;
