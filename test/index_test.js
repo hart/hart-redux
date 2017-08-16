@@ -6,7 +6,8 @@ import {
 	createActionNames, 
 	configureStore, 
 	getModules, 
-	registerModule 
+	registerModule ,
+	applyNamespaceToAll
 } from '../src';
 
 
@@ -23,14 +24,14 @@ let reducerNames = Object.assign({}, getDefaultReducerNames(), {
 });
 
 const selectorNames = Object.assign(getDefaultSelectorNames(), {
-	getObjectIds: "getAppIds",
-	getObjects: "getApps",
-	getObjectById: "getAppById",
-	areObjectsLoading: "areAppsLoading",
-	hasObjects: "hasApps",
-	isObjectCreating: "isAppCreating",
-	isObjectUpdating: "isAppUpdating",
-	isObjectDeleting: "isAppDeleting",
+	getObjectIds: "getFooIds",
+	getObjects: "getFoos",
+	getObjectById: "getFooById",
+	areObjectsLoading: "areFoosLoading",
+	hasObjects: "hasFoos",
+	isObjectCreating: "isFooCreating",
+	isObjectUpdating: "isFooUpdating",
+	isObjectDeleting: "isFooDeleting",
 });
 
 const normalized  = createNormalizedReducers(FoosActions, reducerNames, selectorNames);
@@ -38,13 +39,19 @@ const normalized  = createNormalizedReducers(FoosActions, reducerNames, selector
 const reducer = combineReducers(normalized.reducers);
 const selectors = normalized.selectors;
 
+// passing the "slice" of state required for the selector
+// child reducers and selectors should know nothing about the state shape above their own
+const FoosSelectors = applyNamespaceToAll(namespace, selectors);
+
+console.log("FoosSelectors (namespaced)", FoosSelectors);
+
 const Foos = Object.assign({
 	/* required */
 	reducer, // must export the combined reducer
 	namespace, // must export the namespace
 	/* optional */
 	FoosActions
-}, selectors);
+}, FoosSelectors);
 
 registerModule("Foos", Foos);
 
