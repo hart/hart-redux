@@ -1,9 +1,9 @@
 import promiseMiddleware from 'redux-promise';
 import thunkMiddleware from 'redux-thunk';
 
-import { configureStore, getModules, registerModule } from '../src';
+import { configureStore, getModules, registerModule } from '../../src';
 
-import Foos from './Foos';
+import Foos from './';
 registerModule("Foos", Foos);
 
 console.log("modules registered");
