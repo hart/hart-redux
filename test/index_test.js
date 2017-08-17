@@ -7,11 +7,12 @@ import {
 	configureStore, 
 	getModules, 
 	registerModule ,
-	applyNamespaceToAll
+	applyNamespaceToAll,
+	normalizedAction
 } from '../src';
 
 
-const FoosActions = createActionNames("foos");
+const FoosActionNames = createActionNames("foos");
 const namespace = "foo.foos";
 
 //Change some of reducer names from the default
@@ -34,7 +35,21 @@ const selectorNames = Object.assign(getDefaultSelectorNames(), {
 	isObjectDeleting: "isFooDeleting",
 });
 
-const normalized  = createNormalizedReducers(FoosActions, reducerNames, selectorNames);
+const normalized  = createNormalizedReducers(FoosActionNames, reducerNames, selectorNames);
+
+const FoosActions = {};
+
+FoosActions.testAction = normalizedAction({
+	negativeCondition: state => selectors.areFoosLoading(state),
+	operationActions: FoosActionNames.FETCH,
+	actionPromise: new Promise((resolve, reject) => {
+		if(Math.random() > .5){
+			resolve({data: [{id: 1, name: "foo 1"}, {id: 2, name: "foo 2"}]});
+		}else{
+			reject("Luck was not with you.");
+		}
+	})
+})
 
 const reducer = combineReducers(normalized.reducers);
 const selectors = normalized.selectors;

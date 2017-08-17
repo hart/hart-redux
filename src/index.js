@@ -5,3 +5,5 @@ export * from './modules';
 export * from './normalizedReducers';
 
 export * from './namespace';
+
+export * from './normalizedActions';
