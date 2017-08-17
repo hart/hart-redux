@@ -18,6 +18,8 @@
   "devDependencies": {
     "neutrino": "^6.1.5",
     "neutrino-preset-mocha": "^6.1.5",
-    "neutrino-preset-node": "^6.1.5"
+    "neutrino-preset-node": "^6.1.5",
+    "redux-promise": "^0.5.3",
+    "redux-thunk": "^2.2.0"
   }
 }
