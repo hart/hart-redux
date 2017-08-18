@@ -31,5 +31,12 @@ describe('Foos', function() {
             }
         );
     });
+
+    it('should update the state with new Foos', function(){
+        should.exist(Foos.getFoos(store.getState()));
+        Foos.getFoos(store.getState()).should.be.a('array');
+        Foos.getFoos(store.getState()).should.have.length(2);
+    });
+    
   });
 });
