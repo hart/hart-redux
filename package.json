@@ -16,8 +16,11 @@
     "redux": "^3.7.2"
   },
   "devDependencies": {
+    "chai": "^4.1.1",
     "neutrino": "^6.1.5",
     "neutrino-preset-mocha": "^6.1.5",
-    "neutrino-preset-node": "^6.1.5"
+    "neutrino-preset-node": "^6.1.5",
+    "redux-promise": "^0.5.3",
+    "redux-thunk": "^2.2.0"
   }
 }
