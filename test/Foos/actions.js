@@ -5,21 +5,22 @@ import { normalizedAction } from '../../src';
 const { areFoosLoading } = Selectors;
 
 export const loadFoos = normalizedAction({
-	negativeCondition: getState => Selectors.areFoosLoading(getState()),
+	negativeCondition: (getState, ...params) => Selectors.areFoosLoading(getState()),
 	operationActions: Actions.FETCH,
-	actionPromise: () => new Promise((resolve, reject) => {
+	actionPromise: (getState, foos) => new Promise((resolve, reject) => {
+		console.log("actionPromise", foos);
 		setTimeout(() => {
-			resolve({data: [{id: 1, name: "foo 1"}, {id: 2, name: "foo 2"}]});
+			resolve({data: foos});
 		}, 10);
 	})
 });
 
 export const loadFoosWithError = normalizedAction({
-	negativeCondition: getState => Selectors.areFoosLoading(getState()),
+	negativeCondition: (getState, ...params) => Selectors.areFoosLoading(getState()),
 	operationActions: Actions.FETCH,
-	actionPromise: (getState) => new Promise((resolve, reject) => {
+	actionPromise: (getState, foos) => new Promise((resolve, reject) => {
 		setTimeout(() => {
-			reject({error: "Luck was not with you."});
+			reject({error: "Luck was not with you.", params: {foos: foos} });
 		}, 10);
 	})
 });

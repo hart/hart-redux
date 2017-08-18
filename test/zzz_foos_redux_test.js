@@ -8,8 +8,9 @@ const Foos = getModule("Foos");
 
 describe('Foos', function() {
   describe('dispatch()', function() {
+    let foos = [{id: 1, name: "name1"}, {id: 2, name: "name2"}];
     it('should dispatch Foos Actions', function() {
-        return store.dispatch(Foos.Actions.loadFoos).then(
+        return store.dispatch(Foos.Actions.loadFoos(foos, "other")).then(
             res => {
                 should.exist(res);
                 should.not.exist(res.error);
@@ -21,7 +22,7 @@ describe('Foos', function() {
     });
 
     it('should handle Foos Actions error', function(){
-        return store.dispatch(Foos.Actions.loadFoosWithError).then(
+        return store.dispatch(Foos.Actions.loadFoosWithError(foos, "something")).then(
             res => {
                should.exist(res);
                should.exist(res.error);
@@ -36,6 +37,9 @@ describe('Foos', function() {
         should.exist(Foos.getFoos(store.getState()));
         Foos.getFoos(store.getState()).should.be.a('array');
         Foos.getFoos(store.getState()).should.have.length(2);
+        let foo1 = Foos.getFooById(store.getState(), 1);
+        should.exist(foo1);
+        foo1.name.should.equal("name1");
     });
     
   });

@@ -1,5 +1,6 @@
-export const normalizedAction = ({ negativeCondition, operationActions, actionPromise }) => (dispatch, getState) => {
-	if(negativeCondition(getState)){
+export const normalizedAction = ({ negativeCondition, operationActions, actionPromise }) => (...params) => (dispatch, getState) => {
+
+	if(negativeCondition(getState, params)){
 		return Promise.resolve();
 	}
 
@@ -7,7 +8,7 @@ export const normalizedAction = ({ negativeCondition, operationActions, actionPr
 		type: operationActions.REQUEST
 	});
 
-	return actionPromise(getState).then(
+	return actionPromise(getState, ...params).then(
 		response => {
 			dispatch({
 				type: operationActions.SUCCESS,
