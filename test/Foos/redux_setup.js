@@ -6,9 +6,6 @@ import { configureStore, getModules, registerModule } from '../../src';
 import Foos from './';
 registerModule("Foos", Foos);
 
-console.log("modules registered");
-console.log(getModules());
-
 const loadState = () => {};
 
 const storeEnhancers = [

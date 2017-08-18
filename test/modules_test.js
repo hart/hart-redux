@@ -33,6 +33,7 @@ describe('modules.js', function(){
 		it('should return an object of objects', function(){
 			should.exist(getModules());
 			getModules().should.be.a('object');
+			
 			should.exist(getModules().Foos);
 			getModules().Foos.should.be.a('object');
 			getModules().Foos.should.equal(myModule);

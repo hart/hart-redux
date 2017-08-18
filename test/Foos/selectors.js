@@ -6,6 +6,4 @@ import { applyNamespaceToAll } from '../../src';
 // child reducers and selectors should know nothing about the state shape above their own
 const FoosSelectors = applyNamespaceToAll(namespace, selectors);
 
-console.log("FoosSelectors (namespaced)", FoosSelectors);
-
 export default FoosSelectors;
