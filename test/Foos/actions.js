@@ -5,7 +5,7 @@ import { normalizedAction } from '../../src';
 const { areFoosLoading } = Selectors;
 
 export const loadFoos = normalizedAction({
-	negativeCondition: state => Selectors.areFoosLoading(state),
+	negativeCondition: getState => Selectors.areFoosLoading(getState()),
 	operationActions: Actions.FETCH,
 	actionPromise: () => new Promise((resolve, reject) => {
 		setTimeout(() => {
@@ -15,9 +15,9 @@ export const loadFoos = normalizedAction({
 });
 
 export const loadFoosWithError = normalizedAction({
-	negativeCondition: state => Selectors.areFoosLoading(state),
+	negativeCondition: getState => Selectors.areFoosLoading(getState()),
 	operationActions: Actions.FETCH,
-	actionPromise: () => new Promise((resolve, reject) => {
+	actionPromise: (getState) => new Promise((resolve, reject) => {
 		setTimeout(() => {
 			reject({error: "Luck was not with you."});
 		}, 10);
