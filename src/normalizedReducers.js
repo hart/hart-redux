@@ -1,3 +1,5 @@
+import _union from 'lodash/union';
+
 const defaultOperationNames = ["fetch", "create", "update", "delete"];
 const defaultActionNames = ["request", "success", "error"];
 
@@ -28,7 +30,7 @@ const IdsReducer = Actions => (state = [], action) => {
 	switch (action.type) {
 		// case for the complete list of objects returned
 		case Actions.FETCH.SUCCESS:
-			return action.response.data.map(object => object.id);
+			return _union(state ,action.response.data.map(object => object.id));
 		case Actions.CREATE.SUCCESS:
 			return [...state, action.response.data.id];
 		default:
@@ -40,10 +42,10 @@ const ByIdsReducer = Actions => (state = {}, action) => {
 	switch (action.type) {
 		// case for the complete list of objects returned
 		case Actions.FETCH.SUCCESS:
-			return action.response.data.reduce((objects, object) => {
+			return Object.assign(state ,action.response.data.reduce((objects, object) => {
 				objects[object.id] = object;
 				return objects;
-			}, {});
+			}, {}));
 		case Actions.CREATE.SUCCESS:
 			let object = action.response.data;
 			return Object.assign({}, state, {[object.id]: object});
