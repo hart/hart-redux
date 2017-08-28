@@ -1,4 +1,5 @@
 import _union from 'lodash/union';
+import _without from 'lodash/without';
 
 const defaultOperationNames = ["fetch", "create", "update", "delete"];
 const defaultActionNames = ["request", "success", "error"];
@@ -39,6 +40,8 @@ const IdsReducer = Actions => (state = [], action) => {
 			}
 		case Actions.CREATE.SUCCESS:
 			return [...state, action.response.data.id];
+		case Actions.DELETE.SUCCESS:
+			return _without(state, action.response.data.id);
 		default:
 			return state;
 	}
@@ -59,8 +62,13 @@ const ByIdsReducer = Actions => (state = {}, action) => {
 				}, {}));
 			}
 		case Actions.CREATE.SUCCESS:
+		case Actions.UPDATE.SUCCESS:
 			let object = action.response.data;
 			return Object.assign({}, state, {[object.id]: object});
+		case Actions.DELETE.SUCCESS:
+			let newState = Object.assign({}, state)
+			delete newState[action.response.data.id];
+			return newState;
 		default:
 			return state;
 	}
