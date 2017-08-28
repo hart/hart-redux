@@ -30,7 +30,13 @@ const IdsReducer = Actions => (state = [], action) => {
 	switch (action.type) {
 		// case for the complete list of objects returned
 		case Actions.FETCH.SUCCESS:
-			return _union(state ,action.response.data.map(object => object.id));
+			if(action.response.data.id){
+				//single item
+				return [...state, action.response.data.id];
+			}else{
+				//multiple items
+				return _union(state, action.response.data.map(object => object.id));
+			}
 		case Actions.CREATE.SUCCESS:
 			return [...state, action.response.data.id];
 		default:
@@ -42,10 +48,16 @@ const ByIdsReducer = Actions => (state = {}, action) => {
 	switch (action.type) {
 		// case for the complete list of objects returned
 		case Actions.FETCH.SUCCESS:
-			return Object.assign(state ,action.response.data.reduce((objects, object) => {
-				objects[object.id] = object;
-				return objects;
-			}, {}));
+			if(action.response.data.id){
+				//single item
+				return Object.assign(state, { [action.response.data.id]: action.response.data });
+			}else{
+				//multiple items
+				return Object.assign(state ,action.response.data.reduce((objects, object) => {
+					objects[object.id] = object;
+					return objects;
+				}, {}));
+			}
 		case Actions.CREATE.SUCCESS:
 			let object = action.response.data;
 			return Object.assign({}, state, {[object.id]: object});
