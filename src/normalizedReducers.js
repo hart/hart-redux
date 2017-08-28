@@ -32,7 +32,7 @@ const IdsReducer = Actions => (state = [], action) => {
 		case Actions.FETCH.SUCCESS:
 			if(action.response.data.id){
 				//single item
-				return [...state, action.response.data.id];
+				return _union(state, [action.response.data.id]);
 			}else{
 				//multiple items
 				return _union(state, action.response.data.map(object => object.id));
