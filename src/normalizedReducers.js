@@ -137,8 +137,8 @@ const PageIdsReducer = Actions => (state = {}, action) => {
 	switch (action.type) {
 		case Actions.FETCH.SUCCESS:
 			const metadata = action.response.metadata;
-			if(metadata && metadata.pageIndex){
-				const ids = action.response.data.items.map(item => item.id);
+			if(metadata && metadata.pageIndex != null){
+				const ids = action.response.data.map(item => item.id);
 				return Object.assign({}, state, { [metadata.pageIndex]: ids })
 			}else{
 				return state;
