@@ -136,6 +136,7 @@ const ObjectDeleteReducer = Actions => (state = false, action) => {
 const getObjectIds = ({ allIds }) => (state) => state[allIds];
 const getObjects = ({ allIds, byIds }) => (state) => state[allIds].map(id => state[byIds][id]);
 const getObjectById = ({ byIds }) => (state, id) => state[byIds][id];
+const getObjectsByIds = ({ byIds }) => (state, ids) => ids.map(id => state[byIds][id]);
 const areObjectsLoading = ({ areObjectsLoading }) => (state) => state[areObjectsLoading];
 const hasObjects = ({ hasObjects }) => (state) => state[hasObjects]; //rename me, please
 const isObjectCreating = ({ objectCreating }) => (state) => state[objectCreating];
@@ -156,6 +157,7 @@ export const getDefaultSelectorNames = () => ({
 	getObjectIds: "getObjectIds",
 	getObjects: "getObjects",
 	getObjectById: "getObjectById",
+	getObjectsByIds: "getObjectsByIds",
 	areObjectsLoading: "areObjectsLoading",
 	hasObjects: "hasObjects",
 	isObjectCreating: "isObjectCreating",
@@ -178,6 +180,7 @@ export const createNormalizedReducers = ( Actions, ReducerNames = getDefaultRedu
 			[SelectorNames.getObjectIds]: getObjectIds(ReducerNames),
 			[SelectorNames.getObjects]: getObjects(ReducerNames),
 			[SelectorNames.getObjectById]: getObjectById(ReducerNames),
+			[SelectorNames.getObjectsByIds]: getObjectsByIds(ReducerNames),
 			[SelectorNames.areObjectsLoading]: areObjectsLoading(ReducerNames),
 			[SelectorNames.hasObjects]: hasObjects(ReducerNames),
 			[SelectorNames.isObjectCreating]: isObjectCreating(ReducerNames),
