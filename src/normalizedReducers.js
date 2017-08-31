@@ -148,6 +148,24 @@ const PageIdsReducer = Actions => (state = {}, action) => {
 	}
 }
 
+const PageMetadataReducer = Actions => (state = {}, action) => {
+	switch (action.type) {
+		case Actions.FETCH.SUCCESS:
+			const metadata = action.response.metadata;
+			if(metadata){
+				return {
+					itemsPerPage: metadata.itemsPerPage,
+					totalItems: metadata.totalItems,
+					totalPages: metadata.totalPages
+				}
+			}else{
+				return state;
+			}
+		default:
+			return state;
+	}
+}
+
 const getObjectIds = ({ allIds }) => (state) => state[allIds];
 const getObjects = ({ allIds, byIds }) => (state) => state[allIds].map(id => state[byIds][id]);
 const getObjectById = ({ byIds }) => (state, id) => state[byIds][id];
@@ -158,6 +176,7 @@ const isObjectCreating = ({ objectCreating }) => (state) => state[objectCreating
 const isObjectUpdating = ({ objectUpdating }) => (state) => state[objectUpdating];
 const isObjectDeleting = ({ objectDeleting }) => (state) => state[objectDeleting];
 const getObjectIdsByPage = ({ pageIds }) => (state, pageIndex) => state[pageIds][pageIndex];
+const getPageMetadata = ({ pages }) => (state) => state[pages];
 
 export const getDefaultReducerNames = () => ({
 	allIds: "allIds",
@@ -167,7 +186,8 @@ export const getDefaultReducerNames = () => ({
 	objectCreating: "objectCreating",
 	objectUpdating: "objectUpdating",
 	objectDeleting: "objectDeleting",
-	pageIds: "pageIds"
+	pageIds: "pageIds",
+	pages: "pages"
 });
 
 export const getDefaultSelectorNames = () => ({
@@ -193,7 +213,8 @@ export const createNormalizedReducers = ( Actions, ReducerNames = getDefaultRedu
 			[ReducerNames.objectCreating]: ObjectCreateReducer(Actions),
 			[ReducerNames.objectUpdating]: ObjectUpdateReducer(Actions),
 			[ReducerNames.objectDeleting]: ObjectDeleteReducer(Actions),
-			[ReducerNames.pageIds]: PageIdsReducer(Actions)
+			[ReducerNames.pageIds]: PageIdsReducer(Actions),
+			[ReducerNames.pages]: PageMetadataReducer(Actions)
 		},
 		selectors: {
 			[SelectorNames.getObjectIds]: getObjectIds(ReducerNames),
@@ -205,7 +226,8 @@ export const createNormalizedReducers = ( Actions, ReducerNames = getDefaultRedu
 			[SelectorNames.isObjectCreating]: isObjectCreating(ReducerNames),
 			[SelectorNames.isObjectUpdating]: isObjectUpdating(ReducerNames),
 			[SelectorNames.isObjectDeleting]: isObjectDeleting(ReducerNames),
-			[SelectorNames.getObjectIdsByPage]: getObjectIdsByPage(ReducerNames)
+			[SelectorNames.getObjectIdsByPage]: getObjectIdsByPage(ReducerNames),
+			[SelectorNames.getPageMetadata]: getPageMetadata(ReducerNames)
 		}
 	}
 }
