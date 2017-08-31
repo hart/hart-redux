@@ -200,7 +200,8 @@ export const getDefaultSelectorNames = () => ({
 	isObjectCreating: "isObjectCreating",
 	isObjectUpdating: "isObjectUpdating",
 	isObjectDeleting: "isObjectDeleting",
-	getObjectIdsByPage: "getObjectIdsByPage"
+	getObjectIdsByPage: "getObjectIdsByPage",
+	getPageMetadata: "getPageMetadata"
 });
 
 export const createNormalizedReducers = ( Actions, ReducerNames = getDefaultReducerNames(), SelectorNames = getDefaultSelectorNames()) => {
