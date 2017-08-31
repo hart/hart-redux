@@ -133,6 +133,21 @@ const ObjectDeleteReducer = Actions => (state = false, action) => {
 	}
 };
 
+const PageIdsReducer = Actions => (state = {}, action) => {
+	switch (action.type) {
+		case Actions.FETCH.SUCCESS:
+			const metadata = action.response.metadata;
+			if(metadata && metadata.pageIndex){
+				const ids = action.response.data.items.map(item => item.id);
+				return Object.assign({}, state, { [metadata.pageIndex]: ids })
+			}else{
+				return state;
+			}
+		default:
+			return state;
+	}
+}
+
 const getObjectIds = ({ allIds }) => (state) => state[allIds];
 const getObjects = ({ allIds, byIds }) => (state) => state[allIds].map(id => state[byIds][id]);
 const getObjectById = ({ byIds }) => (state, id) => state[byIds][id];
@@ -142,6 +157,7 @@ const hasObjects = ({ hasObjects }) => (state) => state[hasObjects]; //rename me
 const isObjectCreating = ({ objectCreating }) => (state) => state[objectCreating];
 const isObjectUpdating = ({ objectUpdating }) => (state) => state[objectUpdating];
 const isObjectDeleting = ({ objectDeleting }) => (state) => state[objectDeleting];
+const getObjectIdsByPage = ({ pageIds }) => (state, pageIndex) => state[pageIds][pageIndex];
 
 export const getDefaultReducerNames = () => ({
 	allIds: "allIds",
@@ -150,7 +166,8 @@ export const getDefaultReducerNames = () => ({
 	hasObjects: "hasObjects",
 	objectCreating: "objectCreating",
 	objectUpdating: "objectUpdating",
-	objectDeleting: "objectDeleting"
+	objectDeleting: "objectDeleting",
+	pageIds: "pageIds"
 });
 
 export const getDefaultSelectorNames = () => ({
@@ -163,6 +180,7 @@ export const getDefaultSelectorNames = () => ({
 	isObjectCreating: "isObjectCreating",
 	isObjectUpdating: "isObjectUpdating",
 	isObjectDeleting: "isObjectDeleting",
+	getObjectIdsByPage: "getObjectIdsByPage"
 });
 
 export const createNormalizedReducers = ( Actions, ReducerNames = getDefaultReducerNames(), SelectorNames = getDefaultSelectorNames()) => {
@@ -174,7 +192,8 @@ export const createNormalizedReducers = ( Actions, ReducerNames = getDefaultRedu
 			[ReducerNames.hasObjects]: HasObjectsReducer(Actions),
 			[ReducerNames.objectCreating]: ObjectCreateReducer(Actions),
 			[ReducerNames.objectUpdating]: ObjectUpdateReducer(Actions),
-			[ReducerNames.objectDeleting]: ObjectDeleteReducer(Actions)
+			[ReducerNames.objectDeleting]: ObjectDeleteReducer(Actions),
+			[ReducerNames.pageIds]: PageIdsReducer(Actions)
 		},
 		selectors: {
 			[SelectorNames.getObjectIds]: getObjectIds(ReducerNames),
@@ -185,7 +204,8 @@ export const createNormalizedReducers = ( Actions, ReducerNames = getDefaultRedu
 			[SelectorNames.hasObjects]: hasObjects(ReducerNames),
 			[SelectorNames.isObjectCreating]: isObjectCreating(ReducerNames),
 			[SelectorNames.isObjectUpdating]: isObjectUpdating(ReducerNames),
-			[SelectorNames.isObjectDeleting]: isObjectDeleting(ReducerNames)
+			[SelectorNames.isObjectDeleting]: isObjectDeleting(ReducerNames),
+			[SelectorNames.getObjectIdsByPage]: getObjectIdsByPage(ReducerNames)
 		}
 	}
 }
