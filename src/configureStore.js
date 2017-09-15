@@ -22,14 +22,14 @@ const combineAppReducers = (modules, extraReducers = {}) => {
 };
 
 // send a function to build the store
-export default function configureStore({ modules, initialState, middleware, storeEnhancers }) {
+export default function configureStore({ modules, initialState, middleware, storeEnhancers, reducers }) {
 
 	// setup store
 	let combinedCreateStore = compose( ...storeEnhancers )( createStore );
 
 	// apply middleware to store creation
 	const finalCreateStore = applyMiddleware(...middleware)( combinedCreateStore );
-	const combinedAppReducers = combineAppReducers(modules);
+	const combinedAppReducers = combineAppReducers(modules, reducers);
 
     return finalCreateStore( combinedAppReducers , initialState );
 }
