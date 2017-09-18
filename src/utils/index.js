@@ -1,0 +1,1 @@
+export mapSelectorsToActions from './mapSelectorsToActions';

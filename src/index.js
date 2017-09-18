@@ -1,7 +1,6 @@
-export Config from './Config';
-
-export Reducers from './Reducers';
-
+export ActionTypes from './ActionTypes';
+export MakeStore from './MakeStore';
 export Namespace from './Namespace';
-
-export Actions from './Actions';
+export Normalized from './Normalized';
+export RequestAction from './RequestAction';
+export StoreConfig from './StoreConfig';
