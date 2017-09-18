@@ -4,3 +4,9 @@ export const applyNamespaceToAll = (namespace, funcs) => Object.keys(funcs).redu
 	mappedFuncs[key] = applyNamespace(namespace, funcs[key]);
 	return mappedFuncs;
 }, {});
+
+//export single default
+export default applyNamespace;
+
+//export all shortname
+export const all = applyNamespaceToAll;
