@@ -1,12 +1,12 @@
-export const selector = (namespace, func) => (state, ...rest) => func(state[namespace], ...rest);
+export const applyNamespace = (namespace, func) => (state, ...rest) => func(state[namespace], ...rest);
 
-export const selectors = (namespace, funcs) => Object.keys(funcs).reduce((mappedFuncs, key) => {
+export const applyNamespaceToAll = (namespace, funcs) => Object.keys(funcs).reduce((mappedFuncs, key) => {
 	mappedFuncs[key] = applyNamespace(namespace, funcs[key]);
 	return mappedFuncs;
 }, {});
 
 //export single default
-export default selector;
+export default applyNamespace;
 
 //export all shortname
-export const all = selectors;
+export const all = applyNamespaceToAll;

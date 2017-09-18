@@ -1,15 +1,14 @@
 import { applyMiddleware, compose, createStore } from 'redux';
 
 // send a function to build the store
-function makeStore({ initialState, middleware, storeEnhancers, reducers }) {
-
+function makeStore({ initialState, middleware, enhancers, reducer } = {}) {	
 	// setup store
-	let combinedCreateStore = (storeEnhancers && storeEnhancers.length > 0) ? compose( ...storeEnhancers )(createStore) : createStore;
+	let combinedCreateStore = (enhancers && enhancers.length > 0) ? compose(...enhancers)(createStore) : createStore;
 
 	// apply middleware to store creation
-	const finalCreateStore = applyMiddleware(...middleware)(combinedCreateStore);
+	const finalCreateStore = (middleware && middleware.length > 0) ? applyMiddleware(...middleware)(combinedCreateStore) : combinedCreateStore;
 
-    return finalCreateStore(reducers , initialState);
+    return finalCreateStore(reducer, initialState);
 }
 
 export default makeStore;

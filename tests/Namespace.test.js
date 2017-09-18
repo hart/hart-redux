@@ -1,7 +1,7 @@
 import chai from 'chai';
 const should = chai.should();
 
-import { default as namespace, applyNamespace, applyNamespaceToAll, all } from '../src'
+import Namespace, { applyNamespace, applyNamespaceToAll, all } from '../src/Namespace'
 
 const state = { 
   person: {
@@ -18,50 +18,52 @@ const getName = state => state.name;
 const getMake = state => state.make;
 const getModel = state => state.model;
 
-describe("applyNamespace", function(){
+describe('Namespace', function(){
+  describe("applyNamespace", function(){
 
-  it('should be equal to the default export', function(){
-    applyNamespace.should.equal(namespace);
+    it('should be equal to the default export', function(){
+      applyNamespace.should.equal(Namespace);
+    });
+
+    it('should map a function to a function', function(){
+      should.exist(applyNamespace("person", getName));
+      applyNamespace("person", getName).should.be.a('function');
+    });
+
+    it('should map a function to a namespaced function', function(){
+      let nameSelector = applyNamespace("person", getName);
+      should.exist(nameSelector(state));
+      nameSelector(state).should.be.a('string');
+      nameSelector(state).should.equal(state.person.name);
+    });
   });
 
-  it('should map a function to a function', function(){
-    should.exist(applyNamespace("person", getName));
-    applyNamespace("person", getName).should.be.a('function');
-  });
+  describe("applyNamespaceToAll", function(){
 
-  it('should map a function to a namespaced function', function(){
-    let nameSelector = applyNamespace("person", getName);
-    should.exist(nameSelector(state));
-    nameSelector(state).should.be.a('string');
-    nameSelector(state).should.equal(state.person.name);
-  });
-});
+    it('should be equal to the "all" export', function(){
+      applyNamespaceToAll.should.equal(all);
+    });
 
-describe("applyNamespaceToAll", function(){
+    it('should map an object map of functions to an object map of functions', function(){
+      let carsSelectors = applyNamespaceToAll("car", {getMake, getModel});
+      should.exist(carsSelectors);
+      carsSelectors.should.be.a('object');
+    });
 
-  it('should be equal to the "all" export', function(){
-    applyNamespaceToAll.should.equal(all);
-  });
+    it('should map each function to a namespaced function', function(){
+      let carsSelectors = applyNamespaceToAll("car", {getMake, getModel});
+      
+      should.exist(carsSelectors.getMake);
+      should.exist(carsSelectors.getModel);
 
-  it('should map an object map of functions to an object map of functions', function(){
-    let carsSelectors = applyNamespaceToAll("car", {getMake, getModel});
-    should.exist(carsSelectors);
-    carsSelectors.should.be.a('object');
-  });
+      should.exist(carsSelectors.getMake(state));
+      should.exist(carsSelectors.getModel(state));
 
-  it('should map each function to a namespaced function', function(){
-    let carsSelectors = applyNamespaceToAll("car", {getMake, getModel});
-    
-    should.exist(carsSelectors.getMake);
-    should.exist(carsSelectors.getModel);
+      carsSelectors.getMake(state).should.be.a('string');
+      carsSelectors.getModel(state).should.be.a('string');
 
-    should.exist(carsSelectors.getMake(state));
-    should.exist(carsSelectors.getModel(state));
-
-    carsSelectors.getMake(state).should.be.a('string');
-    carsSelectors.getModel(state).should.be.a('string');
-
-    carsSelectors.getMake(state).should.equal(state.car.make);
-    carsSelectors.getModel(state).should.equal(state.car.model);
+      carsSelectors.getMake(state).should.equal(state.car.make);
+      carsSelectors.getModel(state).should.equal(state.car.model);
+    });
   });
 });
