@@ -1,6 +1,6 @@
 import { applyMiddleware, compose, createStore, combineReducers } from 'redux';
 
-import namespace from './namespace';
+import Namespace from './Namespace';
 
 // send a function to build the store
 export function configureStore({ initialState, middleware, storeEnhancers, reducers }) {
@@ -34,7 +34,7 @@ class ReduxConfig {
 		this.addMiddleware = (middleware) => this.middleware.push(middleware);
 
 		this.addModule = ({ reducers, selectors, actions, namespace }) => {
-			const mappedSelectors = selectors ? namespace.applyNamespaceToAll(namespace, selectors) : {};
+			const mappedSelectors = selectors ? Namespace.all(namespace, selectors) : {};
 			const mappedActions = actions ? Object.keys(actions).reduce((map, key) => {
 				map[key] = actions[key](mappedSelectors);
 				return map;

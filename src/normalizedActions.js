@@ -25,3 +25,7 @@ export const normalizedAction = ({ negativeCondition, operationActions, actionPr
 		}
 	);
 };
+
+export default {
+	normalizedAction
+}

@@ -1,7 +1,7 @@
-export { default as configureStore } from './configureStore';
+export Config from './Config';
 
-export * from './normalizedReducers';
+export Reducers from './Reducers';
 
-export * from './namespace';
+export Namespace from './Namespace';
 
-export * from './normalizedActions';
+export Actions from './Actions';
