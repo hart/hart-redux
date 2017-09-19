@@ -12,9 +12,9 @@ export default class StoreConfig {
 		};
 
 		this.addReducer = (namespace, reducer) => {
-			if (config.reducers[namespace] !== undefined) {
-				throw new Error(`NamespaceConflictError: namespace already in use. namespace: ${namespace}`)
-			}
+			if(!reducer) throw new Error(`reducer cannot be null for namespace: ${namespace}`);
+			if(typeof reducer !== 'function') throw new Error(`reducer must be a function: namespace: ${namespace}, reducer: ${reducer}`);
+			if (config.reducers[namespace] !== undefined) throw new Error(`NamespaceConflictError: namespace already in use. namespace: ${namespace}`);
 			config.reducers[namespace] = reducer;
 			return this;
 		}

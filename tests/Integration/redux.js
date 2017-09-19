@@ -1,10 +1,12 @@
 import StoreConfig from '../../src/StoreConfig';
-import ModuleConfig from '../../src/ModuleConfig';
+import ModuleLoader from '../../src/ModuleLoader';
 
 const initialState = {};
-const preppedModules = {};
+const loadedModules = {};
 const storeConfig = new StoreConfig({ initialState });
-const moduleConfig = new ModuleConfig(storeConfig, (namespace, module) => preppedModules[namespace] = module);
+
+//map loaded modules however you want, in this case we are creating a new object with selectors assigned at top level and actions in Actions.
+const moduleLoader = new ModuleLoader(storeConfig, (namespace, module) => loadedModules[namespace] = { Actions: module.actions, ...module.selectors });
 
 import promiseMiddleware from 'redux-promise';
 import thunkMiddleware from 'redux-thunk';
@@ -17,9 +19,9 @@ storeConfig
 import Foos from './Foos';
 import Bars from './Bars';
 
-moduleConfig
-.prepareModule("Foos", Foos)
-.prepareModule("Bars", Bars);
+moduleLoader
+.load(Foos("Foos"))
+.load(Bars("Bars"));
 
 export const store = storeConfig.getStore();
-export const modules = preppedModules;
+export const modules = loadedModules;

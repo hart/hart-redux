@@ -1,3 +1,4 @@
+import ModuleConfig from '../../../src/ModuleConfig';
 import ActionTypes from '../../../src/ActionTypes';
 import Normalized, { Defaults } from '../../../src/Normalized';
 
@@ -27,8 +28,11 @@ const selectorNames = Object.assign(Defaults.selectorNames, {
 
 const normalized = Normalized(actionTypes, reducerNames, selectorNames);
 
-export default {
-	actionTypes,
-	actions,
-	...normalized
-};
+export default function(namespace){
+	return new ModuleConfig(namespace)
+		.reducers(normalized.reducers)
+		.selectors(normalized.selectors)
+		.actionTypes(actionTypes)
+		.mapActions(actions)
+		.module();
+}
