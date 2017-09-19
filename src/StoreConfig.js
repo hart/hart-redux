@@ -2,8 +2,7 @@ import { combineReducers } from 'redux';
 import MakeStore from './MakeStore';
 
 export default class StoreConfig {
-	constructor({ reducers={}, enhancers=[], middleware=[], initialState={}, _combineReducers } = {}){
-		const selectedCombineReducers = _combineReducers || combineReducers;
+	constructor({ reducers={}, enhancers=[], middleware=[], initialState={}, _combineReducers=combineReducers, onModuleLoaded } = {}){
 		const config = {
 			reducers: reducers,
 			enhancers: enhancers,
@@ -20,8 +19,24 @@ export default class StoreConfig {
 		}
 
 		this.addReducers = (namespace, reducers) => {
-			const reducer = selectedCombineReducers(reducers);
+			const reducer = _combineReducers(reducers);
 			return this.addReducer(namespace, reducer);
+		}
+
+		this.addModule = (module) => {
+			if(!module) 
+				throw new Error("Can not load null module");
+			if(!module.namespace) 
+				throw new Error(`Module must have a non-null namespace: ${module.namespace}`);
+			if(module.reducer && module.reducers) 
+				throw new Error(`Module can not have both reducer and reducers properties: ${module}`);
+
+			if(module.reducer) this.addReducer(module.namespace, module.reducer);
+			else if(module.reducers) this.addReducers(module.namespace, module.reducers);
+			
+			if(onModuleLoaded) onModuleLoaded(module.namespace, module);
+
+			return this;
 		}
 
 		this.addEnhancer = (enhancer) => {
@@ -37,7 +52,7 @@ export default class StoreConfig {
 		this.get = () => ({ ...config });
 
 		this.getStore = () => MakeStore({
-			reducer: selectedCombineReducers(config.reducers),
+			reducer: _combineReducers(config.reducers),
 			enhancers,
 			middleware,
 			initialState

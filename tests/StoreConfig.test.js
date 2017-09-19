@@ -118,7 +118,7 @@ describe('StoreConfig', function(){
 
 	describe('store', function(){
 		it('should have a non null initial state', function(){
-			const state = store.getState()
+			const state = store.getState();
 			should.exist(state);
 			state.should.be.a('object');
 		});
