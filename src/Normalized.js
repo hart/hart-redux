@@ -4,7 +4,7 @@ import _without from 'lodash/without';
 const IdsReducer = Actions => (state = [], action) => {
 	switch (action.type) {
 		// case for the complete list of objects returned
-		case Actions.FETCH.SUCCESS:
+		case Actions.READ.SUCCESS:
 			if(action.response.data.id){
 				//single item
 				return _union(state, [action.response.data.id]);
@@ -24,7 +24,7 @@ const IdsReducer = Actions => (state = [], action) => {
 const ByIdsReducer = Actions => (state = {}, action) => {
 	switch (action.type) {
 		// case for the complete list of objects returned
-		case Actions.FETCH.SUCCESS:
+		case Actions.READ.SUCCESS:
 			if(action.response.data.id){
 				//single item
 				return Object.assign(state, { [action.response.data.id]: action.response.data });
@@ -50,10 +50,10 @@ const ByIdsReducer = Actions => (state = {}, action) => {
 
 const ObjectsLoadingReducer = Actions => (state = false, action) => {
 	switch (action.type) {
-		case Actions.FETCH.REQUEST:
+		case Actions.READ.REQUEST:
 			return true;
-		case Actions.FETCH.SUCCESS:
-		case Actions.FETCH.ERROR:
+		case Actions.READ.SUCCESS:
+		case Actions.READ.ERROR:
 			return false;
 		default:
 			return state;
@@ -62,9 +62,9 @@ const ObjectsLoadingReducer = Actions => (state = false, action) => {
 
 const HasObjectsReducer = Actions => (state = { hasObjects: null, error: null }, action) => {
 	switch (action.type) {
-		case Actions.FETCH.SUCCESS:
+		case Actions.READ.SUCCESS:
 			return { hasObjects: action.response.data.length > 0, error: null };
-		case Actions.FETCH.ERROR:
+		case Actions.READ.ERROR:
 			return { hasObjects: null, error: action.response.error };
 		default:
 			return state;
@@ -109,7 +109,7 @@ const ObjectDeleteReducer = Actions => (state = false, action) => {
 
 const PageIdsReducer = Actions => (state = {}, action) => {
 	switch (action.type) {
-		case Actions.FETCH.SUCCESS:
+		case Actions.READ.SUCCESS:
 			const metadata = action.response.metadata;
 			if(metadata && metadata.pageIndex != null){
 				const ids = action.response.data.map(item => item.id);
@@ -124,7 +124,7 @@ const PageIdsReducer = Actions => (state = {}, action) => {
 
 const PageMetadataReducer = Actions => (state = {}, action) => {
 	switch (action.type) {
-		case Actions.FETCH.SUCCESS:
+		case Actions.READ.SUCCESS:
 			const metadata = action.response.metadata;
 			if(metadata){
 				return {

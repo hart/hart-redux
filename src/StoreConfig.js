@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
 import MakeStore from './MakeStore';
 
-class StoreConfig {
+export default class StoreConfig {
 	constructor({ reducers={}, enhancers=[], middleware=[], initialState={} } = {}){
 
 		const config = {
@@ -44,5 +44,3 @@ class StoreConfig {
 		});
 	}
 }
-
-export default StoreConfig;
