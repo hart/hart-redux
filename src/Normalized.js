@@ -27,10 +27,10 @@ const ByIdsReducer = Actions => (state = {}, action) => {
 		case Actions.READ.SUCCESS:
 			if(action.response.data.id){
 				//single item
-				return Object.assign(state, { [action.response.data.id]: action.response.data });
+				return Object.assign({}, state, { [action.response.data.id]: action.response.data });
 			}else{
 				//multiple items
-				return Object.assign(state ,action.response.data.reduce((objects, object) => {
+				return Object.assign({}, state, action.response.data.reduce((objects, object) => {
 					objects[object.id] = object;
 					return objects;
 				}, {}));
