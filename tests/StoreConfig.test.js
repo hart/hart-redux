@@ -108,9 +108,9 @@ describe('StoreConfig', function(){
 		});
 	});
 
-	describe('build()', function(){
+	describe('getStore()', function(){
 		it('should build and return a new redux store', function(){
-			store = config.build();
+			store = config.getStore();
 			should.exist(store);
 			store.should.be.a('object');
 		})

@@ -1,22 +1,25 @@
 import StoreConfig from '../../src/StoreConfig';
-import { prepareModule } from '../../src/utils';
+import ModuleConfig from '../../src/ModuleConfig';
 
 const initialState = {};
-const config = new StoreConfig({ initialState });
-export const modules = {};
-
-if(window.devToolsExtension){
-	config.addEnhancer(window.devToolsExtension());
-}
+const preppedModules = {};
+const storeConfig = new StoreConfig({ initialState });
+const moduleConfig = new ModuleConfig(storeConfig, (namespace, module) => preppedModules[namespace] = module);
 
 import promiseMiddleware from 'redux-promise';
 import thunkMiddleware from 'redux-thunk';
 
-config.addMiddleware(thunkMiddleware);
-config.addMiddleware(promiseMiddleware);
+storeConfig
+.addEnhancer(window.devToolsExtension ? window.devToolsExtension() : f => f)
+.addMiddleware(thunkMiddleware)
+.addMiddleware(promiseMiddleware);
 
 import Foos from './Foos';
-Object.assign(modules, prepareModule("Foos", Foos));
-config.addReducers("Foos", Foos.reducers);
+import Bars from './Bars';
 
-export const store = config.build();
+moduleConfig
+.prepareModule("Foos", Foos)
+.prepareModule("Bars", Bars);
+
+export const store = storeConfig.getStore();
+export const modules = preppedModules;

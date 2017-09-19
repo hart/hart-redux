@@ -36,7 +36,7 @@ export default class StoreConfig {
 
 		this.get = () => ({ ...config });
 
-		this.build = () => MakeStore({
+		this.getStore = () => MakeStore({
 			reducer: combineReducers(config.reducers),
 			enhancers,
 			middleware,
