@@ -11,12 +11,19 @@ const state = {
   car: {
     make: "Chevrolet",
     model: "Corvette"
+  },
+  countries: {
+    "us": {
+      id: "us",
+      name: "United States"
+    }
   }
 };
 
 const getName = state => state.name;
 const getMake = state => state.make;
 const getModel = state => state.model;
+const getCountry = (state, id) => state[id];
 
 describe('Namespace', function(){
   describe("applyNamespace", function(){
@@ -26,16 +33,24 @@ describe('Namespace', function(){
     });
 
     it('should map a function to a function', function(){
-      should.exist(applyNamespace("person", getName));
-      applyNamespace("person", getName).should.be.a('function');
+      const getNameSelector = applyNamespace("person", getName)
+      should.exist(getNameSelector);
+      getNameSelector.should.be.a('function');
     });
 
     it('should map a function to a namespaced function', function(){
-      let nameSelector = applyNamespace("person", getName);
-      should.exist(nameSelector(state));
-      nameSelector(state).should.be.a('string');
-      nameSelector(state).should.equal(state.person.name);
+      const getNameSelector = applyNamespace("person", getName);
+      const name = getNameSelector(state);
+      should.exist(name);
+      name.should.equal(state.person.name);
     });
+
+    it('should map extra parameters to the namespaced function', function(){
+      const getCountrySelector = applyNamespace("countries", getCountry);
+      const country = getCountrySelector(state, "us");
+      should.exist(country);
+      country.should.equal(state.countries["us"]);
+    })
   });
 
   describe("applyNamespaceToAll", function(){
@@ -56,14 +71,14 @@ describe('Namespace', function(){
       should.exist(carsSelectors.getMake);
       should.exist(carsSelectors.getModel);
 
-      should.exist(carsSelectors.getMake(state));
-      should.exist(carsSelectors.getModel(state));
+      const make = carsSelectors.getMake(state);
+      const model = carsSelectors.getModel(state);
 
-      carsSelectors.getMake(state).should.be.a('string');
-      carsSelectors.getModel(state).should.be.a('string');
+      should.exist(make);
+      should.exist(model);
 
-      carsSelectors.getMake(state).should.equal(state.car.make);
-      carsSelectors.getModel(state).should.equal(state.car.model);
+      make.should.equal(state.car.make);
+      model.should.equal(state.car.model);
     });
   });
 });
