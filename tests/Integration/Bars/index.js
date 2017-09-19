@@ -18,6 +18,6 @@ export default function(namespace){
 		.reducers(normalized.reducers)
 		.selectors(normalized.selectors)
 		.actionTypes(actionTypes)
-		.mapActions(actions)
+		.buildActions(actions)
 		.module();
 }

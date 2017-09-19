@@ -30,7 +30,7 @@ export default class ModuleConfig {
 			return this;
 		}
 
-		this.mapActions = (actions) => {
+		this.buildActions = (actions) => {
 			if(actions){
 				actions = buildActions(module.actionTypes, module.selectors, actions);
 				return this.actions(actions);
