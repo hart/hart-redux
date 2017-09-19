@@ -2,8 +2,8 @@ import { combineReducers } from 'redux';
 import MakeStore from './MakeStore';
 
 export default class StoreConfig {
-	constructor({ reducers={}, enhancers=[], middleware=[], initialState={} } = {}){
-
+	constructor({ reducers={}, enhancers=[], middleware=[], initialState={}, _combineReducers } = {}){
+		const selectedCombineReducers = _combineReducers || combineReducers;
 		const config = {
 			reducers: reducers,
 			enhancers: enhancers,
@@ -20,7 +20,7 @@ export default class StoreConfig {
 		}
 
 		this.addReducers = (namespace, reducers) => {
-			const reducer = combineReducers(reducers);
+			const reducer = selectedCombineReducers(reducers);
 			return this.addReducer(namespace, reducer);
 		}
 
@@ -37,7 +37,7 @@ export default class StoreConfig {
 		this.get = () => ({ ...config });
 
 		this.getStore = () => MakeStore({
-			reducer: combineReducers(config.reducers),
+			reducer: selectedCombineReducers(config.reducers),
 			enhancers,
 			middleware,
 			initialState
