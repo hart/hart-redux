@@ -11,9 +11,13 @@ export default class StoreConfig {
 		};
 
 		this.addReducer = (namespace, reducer) => {
-			if(!reducer) throw new Error(`reducer cannot be null for namespace: ${namespace}`);
-			if(typeof reducer !== 'function') throw new Error(`reducer must be a function: namespace: ${namespace}, reducer: ${reducer}`);
-			if (config.reducers[namespace] !== undefined) throw new Error(`NamespaceConflictError: namespace already in use. namespace: ${namespace}`);
+			if(!reducer) 
+				throw new Error(`reducer cannot be null for namespace: ${namespace}`);
+			if(typeof reducer !== 'function')
+				throw new Error(`reducer must be a function: namespace: ${namespace}, reducer: ${reducer}`);
+			if (config.reducers[namespace] !== undefined) 
+				throw new Error(`NamespaceConflictError: namespace already in use. namespace: ${namespace}`);
+
 			config.reducers[namespace] = reducer;
 			return this;
 		}
@@ -31,10 +35,13 @@ export default class StoreConfig {
 			if(module.reducer && module.reducers) 
 				throw new Error(`Module can not have both reducer and reducers properties: ${module}`);
 
-			if(module.reducer) this.addReducer(module.namespace, module.reducer);
-			else if(module.reducers) this.addReducers(module.namespace, module.reducers);
+			if(module.reducer) 
+				this.addReducer(module.namespace, module.reducer);
+			else if(module.reducers) 
+				this.addReducers(module.namespace, module.reducers);
 			
-			if(onModuleLoaded) onModuleLoaded(module.namespace, module);
+			if(onModuleLoaded) 
+				onModuleLoaded(module.namespace, module);
 
 			return this;
 		}
