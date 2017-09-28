@@ -1,6 +1,6 @@
 {
   "name": "@hart/hart-redux",
-  "version": "1.0.0alpha",
+  "version": "1.0.1alpha",
   "description": "",
   "main": "lib/index.js",
   "module": "es/index.js",
