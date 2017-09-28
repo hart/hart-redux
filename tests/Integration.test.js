@@ -1,12 +1,11 @@
 import chai from 'chai';
 const should = chai.should();
 
-import { getModule } from '../src';
-import { store } from './Foos/redux_setup';
+import { store, modules } from './Integration/redux';
 
-const Foos = getModule("Foos");
+const { Foos, Bars } = modules;
 
-describe('Foos', function() {
+describe('Integration Test', function() {
   describe('dispatch()', function() {
     let foos = [{id: 1, name: "name1"}, {id: 2, name: "name2"}];
     it('should dispatch Foos Actions', function() {

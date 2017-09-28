@@ -1,36 +1,10 @@
 import _union from 'lodash/union';
 import _without from 'lodash/without';
 
-const defaultOperationNames = ["fetch", "create", "update", "delete"];
-const defaultActionNames = ["request", "success", "error"];
-
-export const createActionNames = (name, operationNames = defaultOperationNames, actionNames = defaultActionNames) => {
-
-	operationNames = operationNames.map(x => x.toUpperCase());
-	actionNames = actionNames.map(x => x.toUpperCase());
-
-	let objectName = name.toUpperCase();
-
-	return operationNames.reduce((actions, operationName) => {
-
-		let action = actionNames.reduce((constants, actionName) => {
-			let constant = `${objectName}_${operationName}_${actionName}`;
-
-			constants[actionName] = constant;
-
-			return constants;
-		}, {});
-
-		actions[operationName] = action;
-
-		return actions;
-	} , {});
-}
-
 const IdsReducer = Actions => (state = [], action) => {
 	switch (action.type) {
 		// case for the complete list of objects returned
-		case Actions.FETCH.SUCCESS:
+		case Actions.READ.SUCCESS:
 			if(action.response.data.id){
 				//single item
 				return _union(state, [action.response.data.id]);
@@ -50,13 +24,13 @@ const IdsReducer = Actions => (state = [], action) => {
 const ByIdsReducer = Actions => (state = {}, action) => {
 	switch (action.type) {
 		// case for the complete list of objects returned
-		case Actions.FETCH.SUCCESS:
+		case Actions.READ.SUCCESS:
 			if(action.response.data.id){
 				//single item
-				return Object.assign(state, { [action.response.data.id]: action.response.data });
+				return Object.assign({}, state, { [action.response.data.id]: action.response.data });
 			}else{
 				//multiple items
-				return Object.assign(state ,action.response.data.reduce((objects, object) => {
+				return Object.assign({}, state, action.response.data.reduce((objects, object) => {
 					objects[object.id] = object;
 					return objects;
 				}, {}));
@@ -76,10 +50,10 @@ const ByIdsReducer = Actions => (state = {}, action) => {
 
 const ObjectsLoadingReducer = Actions => (state = false, action) => {
 	switch (action.type) {
-		case Actions.FETCH.REQUEST:
+		case Actions.READ.REQUEST:
 			return true;
-		case Actions.FETCH.SUCCESS:
-		case Actions.FETCH.ERROR:
+		case Actions.READ.SUCCESS:
+		case Actions.READ.ERROR:
 			return false;
 		default:
 			return state;
@@ -88,9 +62,9 @@ const ObjectsLoadingReducer = Actions => (state = false, action) => {
 
 const HasObjectsReducer = Actions => (state = { hasObjects: null, error: null }, action) => {
 	switch (action.type) {
-		case Actions.FETCH.SUCCESS:
+		case Actions.READ.SUCCESS:
 			return { hasObjects: action.response.data.length > 0, error: null };
-		case Actions.FETCH.ERROR:
+		case Actions.READ.ERROR:
 			return { hasObjects: null, error: action.response.error };
 		default:
 			return state;
@@ -135,7 +109,7 @@ const ObjectDeleteReducer = Actions => (state = false, action) => {
 
 const PageIdsReducer = Actions => (state = {}, action) => {
 	switch (action.type) {
-		case Actions.FETCH.SUCCESS:
+		case Actions.READ.SUCCESS:
 			const metadata = action.response.metadata;
 			if(metadata && metadata.pageIndex != null){
 				const ids = action.response.data.map(item => item.id);
@@ -150,7 +124,7 @@ const PageIdsReducer = Actions => (state = {}, action) => {
 
 const PageMetadataReducer = Actions => (state = {}, action) => {
 	switch (action.type) {
-		case Actions.FETCH.SUCCESS:
+		case Actions.READ.SUCCESS:
 			const metadata = action.response.metadata;
 			if(metadata){
 				return {
@@ -178,7 +152,7 @@ const isObjectDeleting = ({ objectDeleting }) => (state) => state[objectDeleting
 const getObjectIdsByPage = ({ pageIds }) => (state, pageIndex) => state[pageIds][pageIndex];
 const getPageMetadata = ({ pages }) => (state) => state[pages];
 
-export const getDefaultReducerNames = () => ({
+const getDefaultReducerNames = () => ({
 	allIds: "allIds",
 	byIds: "byIds",
 	areObjectsLoading: "areObjectsLoading",
@@ -190,7 +164,7 @@ export const getDefaultReducerNames = () => ({
 	pages: "pages"
 });
 
-export const getDefaultSelectorNames = () => ({
+const getDefaultSelectorNames = () => ({
 	getObjectIds: "getObjectIds",
 	getObjects: "getObjects",
 	getObjectById: "getObjectById",
@@ -204,33 +178,36 @@ export const getDefaultSelectorNames = () => ({
 	getPageMetadata: "getPageMetadata"
 });
 
-export const createNormalizedReducers = ( Actions, ReducerNames = getDefaultReducerNames(), SelectorNames = getDefaultSelectorNames()) => {
-	return {
-		reducers: {
-			[ReducerNames.allIds]: IdsReducer(Actions),
-			[ReducerNames.byIds]: ByIdsReducer(Actions),
-			[ReducerNames.areObjectsLoading]: ObjectsLoadingReducer(Actions),
-			[ReducerNames.hasObjects]: HasObjectsReducer(Actions),
-			[ReducerNames.objectCreating]: ObjectCreateReducer(Actions),
-			[ReducerNames.objectUpdating]: ObjectUpdateReducer(Actions),
-			[ReducerNames.objectDeleting]: ObjectDeleteReducer(Actions),
-			[ReducerNames.pageIds]: PageIdsReducer(Actions),
-			[ReducerNames.pages]: PageMetadataReducer(Actions)
-		},
-		selectors: {
-			[SelectorNames.getObjectIds]: getObjectIds(ReducerNames),
-			[SelectorNames.getObjects]: getObjects(ReducerNames),
-			[SelectorNames.getObjectById]: getObjectById(ReducerNames),
-			[SelectorNames.getObjectsByIds]: getObjectsByIds(ReducerNames),
-			[SelectorNames.areObjectsLoading]: areObjectsLoading(ReducerNames),
-			[SelectorNames.hasObjects]: hasObjects(ReducerNames),
-			[SelectorNames.isObjectCreating]: isObjectCreating(ReducerNames),
-			[SelectorNames.isObjectUpdating]: isObjectUpdating(ReducerNames),
-			[SelectorNames.isObjectDeleting]: isObjectDeleting(ReducerNames),
-			[SelectorNames.getObjectIdsByPage]: getObjectIdsByPage(ReducerNames),
-			[SelectorNames.getPageMetadata]: getPageMetadata(ReducerNames)
-		}
+const build = (Actions, ReducerNames = getDefaultReducerNames(), SelectorNames = getDefaultSelectorNames()) => ({
+	reducers: {
+		[ReducerNames.allIds]: IdsReducer(Actions),
+		[ReducerNames.byIds]: ByIdsReducer(Actions),
+		[ReducerNames.areObjectsLoading]: ObjectsLoadingReducer(Actions),
+		[ReducerNames.hasObjects]: HasObjectsReducer(Actions),
+		[ReducerNames.objectCreating]: ObjectCreateReducer(Actions),
+		[ReducerNames.objectUpdating]: ObjectUpdateReducer(Actions),
+		[ReducerNames.objectDeleting]: ObjectDeleteReducer(Actions),
+		[ReducerNames.pageIds]: PageIdsReducer(Actions),
+		[ReducerNames.pages]: PageMetadataReducer(Actions)
+	},
+	selectors: {
+		[SelectorNames.getObjectIds]: getObjectIds(ReducerNames),
+		[SelectorNames.getObjects]: getObjects(ReducerNames),
+		[SelectorNames.getObjectById]: getObjectById(ReducerNames),
+		[SelectorNames.getObjectsByIds]: getObjectsByIds(ReducerNames),
+		[SelectorNames.areObjectsLoading]: areObjectsLoading(ReducerNames),
+		[SelectorNames.hasObjects]: hasObjects(ReducerNames),
+		[SelectorNames.isObjectCreating]: isObjectCreating(ReducerNames),
+		[SelectorNames.isObjectUpdating]: isObjectUpdating(ReducerNames),
+		[SelectorNames.isObjectDeleting]: isObjectDeleting(ReducerNames),
+		[SelectorNames.getObjectIdsByPage]: getObjectIdsByPage(ReducerNames),
+		[SelectorNames.getPageMetadata]: getPageMetadata(ReducerNames)
 	}
+});
+
+export default build;
+
+export const Defaults = {
+	reducerNames: getDefaultReducerNames(),
+	selectorNames: getDefaultSelectorNames()
 }
-
-
