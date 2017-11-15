@@ -660,4 +660,8 @@ get() returns a copy of the config object if you intend to create a Redux store 
 
 ##### getStore()
 
-getStore() creates and returns a new Redux Store using the MakeStore utility. This will use 'combineReducers' from the 'redux' library to combine reducers added to this config. If does not fit your use case, you can instead use get() to get the final configuration; or pass in _combineReducers in the StoreConfig constructor.
+getStore() creates and returns a new Redux Store using the MakeStore utility. This will use 'combineReducers' from the 'redux' library to combine reducers added to this config. If does not fit your use case, you can instead use get() to get the final configuration; or pass in \_combineReducers in the StoreConfig constructor.
+
+## Author
+
+- [Mark Zepeda](https://github.com/markario)
