@@ -25,6 +25,6 @@ export default function createActionTypes(name, operationNames = defaultOperatio
 }
 
 export const Defaults = {
-	operations: { ...defaultOperationNames },
-	actions: { ...defaultActionNames }
+	operations: [ ...defaultOperationNames ],
+	actions: [ ...defaultActionNames ]
 }

@@ -15,7 +15,7 @@ const reducerNames = Object.assign({}, Defaults.reducerNames, {
 	objectDeleting: "fooDeleting"
 });
 
-const selectorNames = Object.assign(Defaults.selectorNames, {
+const selectorNames = Object.assign({}, Defaults.selectorNames, {
 	getObjectIds: "getFooIds",
 	getObjects: "getFoos",
 	getObjectById: "getFooById",
