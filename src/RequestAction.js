@@ -8,7 +8,7 @@ const requestAction = ({ shouldSkip, operation, promise }) => (...params) => (di
 		type: operation.REQUEST
 	});
 
-	return promise(getState, ...params).then(
+	return promise(dispatch, getState, ...params).then(
 		response => {
 			dispatch({
 				type: operation.SUCCESS,
